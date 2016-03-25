@@ -61,6 +61,11 @@ function index (res){
 				issues.push(issue);
 				done++;
 				if (done === array.length) {
+					issues.sort(function(a, b){
+						if ((a.thumbup * 1) < (b.thumbup * 1)) return 1;
+						if ((a.thumbup * 1) > (b.thumbup * 1)) return -1;
+						return 0;
+					});
 					var html = renderer.render('index', {issues: issues});
 					res.writeHead(200, {'Content-Type': 'text/html; charset=UTF-8'});
 					res.end(html);
