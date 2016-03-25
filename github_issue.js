@@ -17,7 +17,8 @@ github.authenticate();
 var options = {
 	user : 'jjug-ccc',
 	repo : 'call-for-paper-2016spring',
-	state: 'all'
+	state: 'all',
+	per_page: 100
 };
 
 exports.createServer = function() {
