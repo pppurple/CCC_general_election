@@ -50,6 +50,7 @@ function index (res){
 			var issue = {};
 			issue.num   = data.number;
 			issue.title = data.title;
+			issue.html_url = data.html_url;
 			client.fetch(data.html_url, {}, function(err, $, fres) {
 				var thumbup = $("button.btn-link.reaction-summary-item.tooltipped.tooltipped-se.tooltipped-multiline").text();
 				thumbup = thumbup.replace(/(^\s+)|(\s+$)/g, "");
