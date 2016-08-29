@@ -1,14 +1,14 @@
 {
   "name": "CCC_general_election",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "general election for jjug CCC",
   "homepage": "",
   "author": {
     "name": "pppurple"
   },
   "dependencies": {
-    "cheerio-httpcli": "0.6.5",
-    "ect": "0.5.9",
-    "github": "0.2.4"
+    "cheerio-httpcli": "0.6.9",
+    "nunjucks": "2.4.2",
+    "github": "2.5.2"
   }
 }
