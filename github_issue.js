@@ -13,7 +13,11 @@ var github = new GitHubApi({
 	debug: false
 });
 
-github.authenticate();
+github.authenticate({
+	type: "basic",
+	username: "your github username",
+	password: "your github password"
+});
 
 var options = {
 	user : 'jjug-ccc',
@@ -70,7 +74,6 @@ function index (res){
 						return 0;
 					});
 					var html = nunjucks.render('index.html', { issues: issues });
-					//var html = renderer.render('index', {issues: issues});
 					res.writeHead(200, {'Content-Type': 'text/html; charset=UTF-8'});
 					res.end(html);
 				}
