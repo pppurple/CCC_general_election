@@ -4,8 +4,9 @@ var client    = require('cheerio-httpcli');
 var GitHubApi = require("github");
 var path      = require('path');
 var fs        = require('fs');
-var ECT       = require('ect');
-var renderer  = ECT({ root : __dirname + '/views' , ext : '.ect'});
+var nunjucks  = require('nunjucks');
+
+nunjucks.configure('views', { autoescape: true });
 
 var github = new GitHubApi({
 	version: "3.0.0",
@@ -16,8 +17,8 @@ github.authenticate();
 
 var options = {
 	user : 'jjug-ccc',
-	repo : 'call-for-paper-2016spring',
-	state: 'all',
+	repo : 'call-for-paper-2016fall',
+	state: 'open',
 	per_page: 100
 };
 
@@ -37,14 +38,14 @@ exports.createServer = function() {
 		}
 	});
 
-	return server; 
+	return server;
 };
 
 function index (res){
 
 	var issues = [];
 
-	github.issues.repoIssues(options, function(err, datas) {
+	github.issues.getForRepo(options, function(err, datas) {
 		var done = 0;
 		Array.prototype.forEach.call(datas, function(data, index, array) {
 			var issue = {};
@@ -68,7 +69,8 @@ function index (res){
 						if ((a.thumbup * 1) > (b.thumbup * 1)) return -1;
 						return 0;
 					});
-					var html = renderer.render('index', {issues: issues});
+					var html = nunjucks.render('index.html', { issues: issues });
+					//var html = renderer.render('index', {issues: issues});
 					res.writeHead(200, {'Content-Type': 'text/html; charset=UTF-8'});
 					res.end(html);
 				}
