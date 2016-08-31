@@ -3,6 +3,7 @@
   "version": "0.0.2",
   "description": "general election for jjug CCC",
   "homepage": "",
+  "private": true,
   "author": {
     "name": "pppurple"
   },
@@ -10,5 +11,9 @@
     "cheerio-httpcli": "0.6.9",
     "nunjucks": "2.4.2",
     "github": "2.5.2"
-  }
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "main": "server.js"
 }
