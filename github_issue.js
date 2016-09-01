@@ -1,14 +1,14 @@
-var http      = require("http");
-var util      = require('util');
-var client    = require('cheerio-httpcli');
-var GitHubApi = require("github");
-var path      = require('path');
-var fs        = require('fs');
-var nunjucks  = require('nunjucks');
+const http      = require("http");
+const util      = require('util');
+const client    = require('cheerio-httpcli');
+const GitHubApi = require("github");
+const path      = require('path');
+const fs        = require('fs');
+const nunjucks  = require('nunjucks');
 
 nunjucks.configure('views', { autoescape: true });
 
-var github = new GitHubApi({
+const github = new GitHubApi({
   version: "3.0.0",
   debug: false
 });
@@ -19,18 +19,19 @@ github.authenticate({
   password: "your github password"
 });
 
-var options = {
+const options = {
   user : 'jjug-ccc',
   repo : 'call-for-paper-2016fall',
   state: 'open',
   per_page: 100
 };
 
-exports.createServer = function() {
+exports.createServer = () => {
 
-  var server = http.createServer();
+  let server = http.createServer();
 
-  server.on('request', function(req, res) {
+  // routing
+  server.on('request', (req, res) => {
     if(req.url == '/'){
       index(res);
     }else if(path.extname(req.url) == '.js'){
@@ -45,22 +46,22 @@ exports.createServer = function() {
   return server;
 };
 
-function index (res){
+let index = (res) => {
 
-  var issues = [];
+  let issues = [];
 
-  github.issues.getForRepo(options, function(err, datas) {
-    var done = 0;
-    Array.prototype.forEach.call(datas, function(data, index, array) {
-      var issue = {};
+  github.issues.getForRepo(options, (err, datas) => {
+    let done = 0;
+    datas.forEach((data, index, array) => {
+      let issue = {};
       issue.num   = data.number;
       issue.title = data.title;
       issue.html_url = data.html_url;
-      client.fetch(data.html_url, {}, function(err, $, fres) {
-        var thumbup = $("button.btn-link.reaction-summary-item.tooltipped.tooltipped-se.tooltipped-multiline").text();
+      client.fetch(data.html_url, {}, (err, $, fres) => {
+        let thumbup = $("button.btn-link.reaction-summary-item.tooltipped.tooltipped-se.tooltipped-multiline").text();
         thumbup = thumbup.replace(/(^\s+)|(\s+$)/g, "");
-        var reg = /\d+/;
-        var num = 0;
+        let reg = /\d+/;
+        let num = 0;
         if (reg.test(thumbup)) {
           num = reg.exec(thumbup);
         }
@@ -68,37 +69,38 @@ function index (res){
         issues.push(issue);
         done++;
         if (done === array.length) {
-          issues.sort(function(a, b){
+          issues.sort((a, b) => {
             if ((a.thumbup * 1) < (b.thumbup * 1)) return 1;
             if ((a.thumbup * 1) > (b.thumbup * 1)) return -1;
             return 0;
           });
-          var html = nunjucks.render('index.html', { issues: issues });
+          let html = nunjucks.render('index.html', { issues: issues });
           res.writeHead(200, {'Content-Type': 'text/html; charset=UTF-8'});
           res.end(html);
         }
       });
     });
   });
-}
+};
 
-function static (req, res){
-  var mimeTypes = {
+// static files
+let static = (req, res) => {
+  let mimeTypes = {
     '.js': 'text/javascript',
     '.css': 'text/css',
     '.png': 'image/png'
   };
 
-  var filepath = './public' + path.dirname(req.url) + '/' + path.basename(req.url);
+  let filepath = './public' + path.dirname(req.url) + '/' + path.basename(req.url);
 
-  fs.readFile(filepath, function(err, data){
+  fs.readFile(filepath, (err, data) => {
     if(err){
       res.writeHead(500);
-      return res.end('Error loading file');
+      return res.end(`Error loading file ${filepath}`);
     }
     res.writeHead(200, {
       'Content-Type': mimeTypes[path.extname(req.url)]
     });
     res.end(data);
   });
-}
+};
