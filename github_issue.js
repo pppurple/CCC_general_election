@@ -32,13 +32,13 @@ exports.createServer = () => {
 
   // routing
   server.on('request', (req, res) => {
-    if(req.url == '/'){
+    if (req.url == '/'){
       index(res);
-    }else if(path.extname(req.url) == '.js'){
+    } else if (path.extname(req.url) == '.js'){
       static(req, res);
-    }else if(path.extname(req.url) == '.css'){
+    } else if (path.extname(req.url) == '.css'){
       static(req, res);
-    }else if(path.extname(req.url) == '.png'){
+    } else if (path.extname(req.url) == '.png'){
       static(req, res);
     }
   });
@@ -46,7 +46,7 @@ exports.createServer = () => {
   return server;
 };
 
-let index = (res) => {
+let index = res => {
 
   let issues = [];
 
@@ -56,6 +56,7 @@ let index = (res) => {
       let issue = {};
       issue.num   = data.number;
       issue.title = data.title;
+      issue.user  = data.user.login;
       issue.html_url = data.html_url;
       client.fetch(data.html_url, {}, (err, $, fres) => {
         let thumbup = $("button.btn-link.reaction-summary-item.tooltipped.tooltipped-se.tooltipped-multiline").text();
@@ -94,7 +95,7 @@ let static = (req, res) => {
   let filepath = './public' + path.dirname(req.url) + '/' + path.basename(req.url);
 
   fs.readFile(filepath, (err, data) => {
-    if(err){
+    if (err){
       res.writeHead(500);
       return res.end(`Error loading file ${filepath}`);
     }

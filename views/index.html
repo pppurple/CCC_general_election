@@ -16,7 +16,7 @@
     {% for issue in issues %}
       <tr>
         <td>{{ issue.thumbup }}</td>
-        <td>{{ issue.title }}</td>
+        <td>{{ issue.title }} / {{ issue.user }}</td>
         <td><a href="{{ issue.html_url }}">link</a></td>
       </tr>
     {% endfor %}
