@@ -1,4 +1,4 @@
-# CCC_general_election
-Realtime report of general election for jjug CCC
+# CCC general election
+Realtime report of general election for jjug CCC CfP
 
-![capture](https://raw.github.com/wiki/pppurple/CCC_general_election/ccc.jpg)
+![capture](https://raw.github.com/wiki/pppurple/CCC_general_election/ccc.png)
