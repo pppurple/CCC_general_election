@@ -40,6 +40,8 @@ exports.createServer = () => {
       static(req, res);
     } else if (path.extname(req.url) == '.png'){
       static(req, res);
+    } else {
+      res404(req, res);
     }
   });
 
@@ -104,4 +106,9 @@ let static = (req, res) => {
     });
     res.end(data);
   });
+};
+
+let res404 = (req, res) => {
+  res.writeHead(404);
+  res.end('page not found.');
 };
